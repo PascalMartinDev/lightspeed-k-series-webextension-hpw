@@ -1,1 +1,1 @@
-# lightspeed-k-series-webextension-hpw
+# Lightspeed K Series Webextension HPW
