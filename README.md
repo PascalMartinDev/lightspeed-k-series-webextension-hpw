@@ -1,0 +1,1 @@
+# lightspeed-k-series-webextension-hpw
