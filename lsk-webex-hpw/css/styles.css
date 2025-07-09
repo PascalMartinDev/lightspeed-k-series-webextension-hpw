@@ -1,0 +1,52 @@
+@media (min-width: 768px) {
+  .flex {
+    display: flex;
+    align-items: center;
+  }
+  body {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+}
+.btn-outline-primary {
+  background-color: #2e61de !important;
+  color: #ffffff !important;
+  border: none;
+}
+.btn-outline-secondary {
+  background-color: #ffffff !important;
+  color: #ffffff !important;
+  border: none;
+}
+h5 {
+  font-weight: bold;
+}
+
+small {
+  color: #919191;
+}
+
+.hotmail_warning {
+  font-weight: 600; /* Semi-bold weight */
+  text-align: center; /* Center the text */
+  color: orange;
+}
+
+#noEmail {
+  display: none;
+}
+#addMemberDiscountsButton {
+  display: none;
+}
+#addNewCustomerButton {
+  display: none;
+}
+#generalAlert {
+  display: none;
+}
+#customerFormSection {
+  display: none;
+  position: relative;
+}
+#testingSection {
+  display: block;
+}

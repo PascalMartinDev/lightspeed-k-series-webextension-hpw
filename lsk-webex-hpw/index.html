@@ -1,13 +1,215 @@
-<!doctype html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+		<title>Lightspeed K-Series WebExtension</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200" rel="stylesheet">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC" crossorigin="anonymous">
+		<link rel="stylesheet" href="./css/styles.css">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/js/bootstrap.bundle.min.js" integrity="sha384-YUe2LzesAfftltw+PEaao2tjU/QATaW/rOitAq67e0CT0Zi2VVRL0oC4+gAaeBKu" crossorigin="anonymous"></script>
+	
   </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
-</html>
+	<body onload="initialiseExtension()">
+		<header class="container-fluid bg-light m-0 p-0">
+			<!-- Header with menu buttons -->
+				<div class="col text-center">
+					<button type="button" class="btn-close position-absolute top-0 end-0 m-3" id="webExtensionButtonId" aria-label="Close" onclick="closeWebExtension()"></button>
+					<!--- ADD BUSINESS LOGO --->
+					<img src="https://burchfamilywines.com.au/wp-content/uploads/2023/06/BurchFamilyWinesAllBrandsBW.png" alt="logo" class="img-fluid p-1" width="300px"/>  
+				</div>
+			</div>
+			<hr/>
+		</header>
+		<section> <!-- Section for Alerts -->
+			<div class="alert alert-warning text-center m-0 p-0" id="generalAlert">
+					<h4 id="alert-header"><strong></strong></h4>
+					<p id="alert-text"></p>
+			</div>
+		</section>
+		<!-- DISPLAY SECTION -->
+		<section id="displaySection">
+			<section> <!-- Section for customer information -->
+				<div class="container mt-4">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Customer Information</h5>
+									<p class="card-text"><strong>First Name:</strong> <span id="firstname"></span></p>
+									<p class="card-text"><strong>Last Name:</strong> <span id="lastname"></span></p>
+									<p class="card-text"><strong>Email:</strong> <span id="emailAddress"></span></p>
+									<p class="card-text"><strong>Phone:</strong> <span id="phoneNo"></span></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Membership Information</h5>
+									<p class="card-text"><strong>Member Level:</strong> <span id="groups"></span></p>
+									<p class="card-text"><strong>Member Promotion:</strong> <span id="memberPromotion"></span></p>
+									<p class="card-text"><strong>Customer Notes:</strong></p>
+									<p class="card-text"><span id="customerNotes"></span></p>								
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>	
+			<section>
+				<!-- Section for Other Information -->
+				<div class="container mt-4">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-body">
+									<p class="card-text"><strong>Last Cellar Door Visit Date:</strong> <span id="posLastVisitDate"></span></p>
+									<p class="card-text"><strong>Last Order Items:</strong></p>
+									<p class="card-text" id="lastOrderItems"></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Wine Club Details</h5>
+									<p class="card-text"><strong>Wine Club First Joined Date:</strong> <span id="wineClubFirstJoinedDate"></span></p>
+									<p class="card-text"><strong>VIP: </strong> <span id="isVipMember"></span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>		
+			</section>
+			<!-- Address Section -->
+			<section>
+				<div class="container mt-4">  
+					<div class="row mt-4">
+						<div class="col">
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Address</h5>
+									<p class="card-text"><strong>Street:</strong> <span id="street"></span></p>
+									<p class="cart-text"><strong>City:</strong> <span id="city"></span></p>
+									<p class="card-text"><strong>State:</strong> <span id="state"></span></p>
+									<p class="card-text"><strong>Postcode:</strong> <span id="postcode"></span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</section>
+		<!--- ADD / UPDATE CUSTOMER FORM SECTION--->
+		<section id="customerFormSection">
+			<div class="container mt-5">
+				<div class="card shadow-lg position-relative">
+					<!-- Close Button -->
+					<button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onclick="closeNewCustomerForm()"></button>
+					<div class="card-body">
+						<h3 class="card-title text-center mb-4">Add New or Update Member</h3>
+						<form id="add-member-form" onsubmit="handleAddNewMemberFormSubmit(event)" novalidate>
+							<div class="mb-3">
+								<label for="form-first-name" class="form-label">First Name <small> - (Required)</small></label>
+								<input type="text" class="form-control" id="form-first-name" name="form-first-name" required>
+								<div class="invalid-feedback">First name is required.</div>
+							</div>
+							<div class="mb-3">
+								<label for="form-last-name" class="form-label">Last Name <small> - (Required)</small></label>
+								<input type="text" class="form-control" id="form-last-name" name="form-last-name" required>
+								<div class="invalid-feedback">Last name is required.</div>
+							</div>
+							<div class="mb-3">
+								<label for="form-email" class="form-label">Email <small> - (Required)</small></label>
+								<input type="email" class="form-control" id="form-email" name="form-email" required>
+								<p class="hotmail_warning">Hotmail emails have delivery issues! Please ask the customer for a different email</P>
+								<div class="invalid-feedback">Valid email is required.</div>
+							</div>
+							<div class="mb-3">
+								<label for="form-phone" class="form-label">Mobile <small> - (Required)</small></label>
+								<input type="tel" class="form-control" id="form-phone" name="form-phone" required pattern="^\+?[0-9\s\-]{10,20}$">
+								<div class="invalid-feedback">Valid 10-digit phone number is required.</div>
+							</div>
+							<div class="row mb-3">
+								<div class="col-md-6">
+								<label for="postcode" class="form-label">Postcode</label>
+								<input type="text" class="form-control" id="form-postcode" name="form-postcode">
+							</div>
+							<div class="col-md-6">
+								<label for="form-state" class="form-label m-2">State:</label>
+								<select class="form-state" id="form-state" name="form-state">
+									<option value="" disabled selected>Select State</option>
+									<option value="WA">Western Australia</option>	
+									<option value="SA">South Australia</option>
+									<option value="VIC">Victoria</option>
+									<option value="NSW">New South Wales</option>
+									<option value="ACT">Australian Capital Territory</option>
+									<option value="QLD">Queensland</option>
+									<option value="TAS">Tasmania</option>
+									<option value="NT">Northern Territory</option>				  
+								</select>
+							</div>
+							</div>
+							<div class="mb-4">
+								<label for="form-membership" class="form-label m-2">Add Member Type: </label>
+								<select class="form-select" id="form-membership" name="form-membership" required>
+									<option value="Wine Club" selected>Wine Club</option>	
+									<option value="Friends of The Burches">Friends of The Burches</option>
+									<option value="International Sales">International Sales</option>
+									<option value="Staff">Staff</option>			  
+								</select>
+								<div class="invalid-feedback">Please select a membership discount option.</div>
+							</div>
+							<div class="text-center">
+								<button type="submit" class="btn btn-primary w-100" id="addNewCustomerBtn">Add / Update Member Details</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>  
+		</section>	
+		
+		<!--- TESTING & DEVELOPMENT SECTION [Remove in production] --->
+		<section id="testingSection">
+			<div class="p-5">
+				<div class="container text-left">
+					<div class="container text-left">
+					<p>Account - Main Object</p>
+					<pre id="account"></pre>
+					<p>Account2 - Miscellaneous!</p>
+					<pre id="account2"></pre> 
+					<p>Account - LineItems</p>
+					<pre id="account3"></pre>
+					<p>Account - Prcing Matrix</p>
+					<pre id="account4"></pre>
+					<p>Account - Scanned Group:</p>
+					<pre id="account5"></pre>
+					<div id="responseBox"></div>
+					</div>
+				</div>
+			</div>	
+		</section>
+
+		<!--- Bottom Section --->
+		<section class="container-fluid bg-light m-0 pb-3">
+			<!-- Secondary Menu Buttons -->
+			<div class="row py-3">
+					<div class="col text-center">
+						<button type="button" class="btn btn-danger btn-lg mt-4" onclick="closeWebExtension()">Close Profile Page</button>
+					</div>
+					<div class="col text-center">
+						<button type="button" class="btn btn-outline-primary btn-lg mt-4" onclick="openNewCustomerForm()">Open Customer Form</button>
+					</div>
+				</div>
+		</section>
+		<!--- FOOTER SECTION --->
+		<footer class="bg-secondary">
+			<div class="container text-left">
+				<div class="container text-center">
+				<p class="text-center p-3 text-white"><strong>Developed by Konnectit.io<span class="mx-3">|</span>For support email: dev@konnectit.io</strong</p>
+				</div>
+			</div>
+		</footer>
+		
+		<script type="module" src="/src/main.ts" defer></script>
+ </body>
+ </html>
