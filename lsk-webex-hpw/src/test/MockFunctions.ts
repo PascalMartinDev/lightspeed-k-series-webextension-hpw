@@ -74,3 +74,9 @@ export function pos_getCurrentAccount(callback: (response: any) => void): void {
     callback(testCustomerData);
   }, 1000);
 }
+
+export const initialiseExtension = (): void => {};
+
+export const openNewCustomerForm = (): void => {};
+
+export const closeWebExtension = (): void => {};
