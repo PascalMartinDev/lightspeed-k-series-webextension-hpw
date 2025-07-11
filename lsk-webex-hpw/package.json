@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/node": "^24.0.13",
     "typescript": "~5.8.3",
     "vite": "^7.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.844.0",
-    "@aws-sdk/lib-dynamodb": "^3.844.0"
+    "@aws-sdk/lib-dynamodb": "^3.844.0",
+    "dotenv": "^17.2.0"
   }
 }
