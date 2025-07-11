@@ -1,4 +1,5 @@
 // Function to get POS's Current account information:
+import { pos_getCurrentAccount } from '../test/MockFunctions';
 
 export type TransactionLine = { [key: string]: string | number | null };
 
